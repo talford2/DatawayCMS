@@ -1,0 +1,54 @@
+﻿@model AssetCategoryListViewModel
+@section HeadContent
+{
+    <script src="/Scripts/PageScripts/AssetCategoryList.js" type="text/javascript"></script>
+}
+<h2>Asset Categories</h2>
+<div class="panel">
+    <div>
+        <form method="post">
+            <label>Name</label>
+            <input type="text" name="Name" />
+            <input type="submit" value="Add" />
+        </form>
+    </div>
+</div>
+<table>
+    <tbody>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th></th>
+            <th>Site</th>
+            <th></th>
+        </tr>
+        @foreach (var category in Model.Categories)
+        {
+            <tr>
+                <td>
+                    @category.Name
+                </td>
+                <td>
+                    <a href="/assets/#@category.Id">View Assets</a>
+                </td>
+                <td>
+                    @if (category.SiteId.HasValue)
+                    {
+                        @Dataway.Cms.Core.CmsSite.Get(category.SiteId.Value).Name;
+                    }
+                    else
+                    {
+                        <text>-</text>
+                    }
+                </td>
+
+                <td class="actions">
+                    <a href="#" class="delete" id="Delete_@(category.Id)" title="Delete">
+                        <span>Delete</span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

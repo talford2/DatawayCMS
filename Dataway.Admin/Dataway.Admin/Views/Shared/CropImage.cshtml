@@ -1,0 +1,57 @@
+﻿<div class="modal-shadow crop-image-popup" style="display: none;" id="CropImage">
+    <div class="popup">
+        <div>
+            <div class="header">
+                <h2>Crop image</h2>
+            </div>
+            
+            <div class="properties">
+                <label>X</label>
+                <input type="text" id="CropImageX" value="0" class="crop-image-update" />
+                <label>Y</label>
+                <input type="text" id="CropImageY" value="0" class="crop-image-update" />
+                <label>W</label>
+                <input type="text" id="CropImageWidth" value="0" class="crop-image-update" />
+                <label>H</label>
+                <input type="text" id="CropImageHeight" value="0" class="crop-image-update" />
+            </div>
+
+            <div class="content" id="CropImageWorkArea">
+                <input type="hidden" id=" CropImageAssetId" />
+                <input type="hidden" id="CropImageField" />
+                
+                <input type="hidden" id="CropImageScale" />
+                
+                <div class="crop-image-area" id="CropImageCropArea">
+                    <div>
+                        <div class="cropper" id="CropImageCropper">
+                            <div>
+
+                                <div id="CropImageDragN"></div>
+                                <div id="CropImageDragE"></div>
+                                <div id="CropImageDragS"></div>
+                                <div id="CropImageDragW"></div>
+
+
+                                <div id="CropImageDragSE" class="handle"></div>
+                                <div id="CropImageDragSW" class="handle"></div>
+                                <div id="CropImageDragNE" class="handle"></div>
+                                <div id="CropImageDragNW" class="handle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content loader" id="CropImageLoader" style="display:none;">
+                <img src="/Images/longLoader.gif" alt="Loading..." />
+            </div>
+
+            <div class="button-container">
+                <input type="button" value="Cancel" id="CropImageCancel" />
+                <input type="button" value="OK" id="CropImageOk" class="ok-button" />
+            </div>
+        </div>
+    </div>
+</div>

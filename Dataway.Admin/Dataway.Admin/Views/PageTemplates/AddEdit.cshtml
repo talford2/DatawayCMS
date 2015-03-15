@@ -1,0 +1,96 @@
+﻿@model PageTemplateViewModel
+@using Dataway.Admin.Plugins.Components
+
+@section HeadContent
+{
+    <script src="@Url.VersionedContent("/Scripts/PageScripts/AddEditPageTemplate.js")" type="text/javascript"></script>
+}
+@section SideSection{
+    <h3>Components</h3>
+    <ul id="component_menu">
+        <li><a id="add_text"><span>Add Text</span></a></li>
+        <li><a id="add_link"><span>Add Link</span></a></li>
+        <li><a id="add_image"><span>Add Image</span></a></li>
+        <li><a id="add_bool"><span>Add Bool</span></a></li>
+        <li><a id="add_container"><span>Add Container</span></a></li>
+        @*<li><a id="add_list"><span>Add List</span></a></li>*@
+    </ul>
+
+    @if (Model.Template != null && Model.Template.Id != 0)
+    {
+        <h3>Implmenting Pages</h3>
+        <ul>
+            @foreach (var page in Model.Template.GetPages())
+            {
+                <li>
+                    <a href="/page/@page.Id"><span>@page.Name</span></a>
+                </li>
+            }
+        </ul>
+    }
+}
+<form method="post">
+    @if (Model.Template != null && Model.Template.Id != 0)
+    {
+        <h2>Page Template - @Model.Template.TemplateName</h2>
+    }
+    else
+    {
+        <h2>New Page Template</h2>
+    }
+    <div class="panel">
+        <input type="hidden" value="@Model.Template.Id" name="Id" />
+        <div>
+            <label for="TemplateName">
+                Name
+            </label>
+            <input type="text" value="@Model.Template.TemplateName" name="TemplateName" id="TemplateName" />
+        </div>
+        <div>
+            <label for="RenderUrl">
+                Render URL
+            </label>
+            <input type="text" value="@Model.Template.RenderUrl" name="RenderUrl" id="RenderUrl" />
+        </div>
+        <div>
+            <label>
+                Key
+            </label>
+            <input type="text" value="@Model.Template.Key" name="Key" id="Key" />
+        </div>
+        <div>
+            <label>Site</label>
+            <select id="SiteId" name="SiteId">
+                <option value="">-- All Sites --</option>
+                @foreach (var site in Common.Sites)
+                {
+                    <option value="@site.Id" selected="@(site.Id == Model.Template.SiteId ? "selected" : null)">@site.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label>Icon</label>
+            <select id="IconId" name="IconId">
+                <option>-- None --</option>
+                @foreach (var icon in Model.Icons)
+                {
+                    <option value="@icon.Id" selected="@(icon.Id == Model.Template.IconId ? "selected" : null)">@icon.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div id="template"></div>
+
+    <div id="templateComponents" style="display: none;">
+        @Html.Partial("~/Plugins/Components/Text/Template.cshtml", new ComponentTemplateViewModel { ComponentType = "text" })
+        @Html.Partial("~/Plugins/Components/Image/Template.cshtml", new ComponentTemplateViewModel { ComponentType = "image" })
+        @Html.Partial("~/Plugins/Components/Container/Template.cshtml", new ComponentTemplateViewModel { ComponentType = "container" })
+        @Html.Partial("~/Plugins/Components/List/Template.cshtml", new ComponentTemplateViewModel { ComponentType = "list" })
+        @Html.Partial("~/Plugins/Components/Generic/Template.cshtml")
+    </div>
+    <textarea id="xml" class="xml" cols="100" rows="8" name="xml">@Model.Template.Xml</textarea>
+    <div class="button-section">
+        <input type="submit" value="Save" />
+    </div>
+</form>

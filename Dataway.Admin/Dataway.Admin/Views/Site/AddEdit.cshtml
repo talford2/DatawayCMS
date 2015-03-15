@@ -1,0 +1,25 @@
+﻿@model SiteViewModel
+@if (Model.Site.Id == 0)
+{
+    <h2>New Site</h2>
+}
+else
+{
+    <h2>Edit Site - @Model.Site.Name</h2>
+}
+<form method="post">
+    <div class="panel">
+        <div>
+            <label for="Name">Name</label>
+            <input type="text" name="Name" id="Name" value="@Model.Site.Name" />
+        </div>
+        <div>
+            <label for="Url">Url</label>
+            <input type="text" name="Url" id="Url" value="@Model.Site.Url" />
+        </div>
+        <div>
+            <input type="hidden" name="Id" id="Id" value="@Model.Site.Id" />
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>

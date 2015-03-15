@@ -1,0 +1,63 @@
+﻿<div class="modal-shadow asset-popup" style="display: none;" id="AssetSelector">
+    <div class="popup">
+        <div>
+
+            <div style="display: none;" class="asset-details" id="AssetSelectorDetails">
+                <img src="/asset-thumb/1?w=200&h=200&dm=0422642763" />
+            </div>
+
+            <input type="hidden" id="AssetSelectorField" />
+            <input type="hidden" id="AssetSelectorAssetId" />
+            <input type="hidden" id="AssetSelectorImagesOnly" value="false" />
+
+
+            <div class="header">
+                <h2 id="AssetSelectorAssetHeader">Select an asset</h2>
+                <div class="header-controls">
+                    <input type="text" id="AssetSelectorKeywords" placeholder="Search" />
+                </div>
+            </div>
+
+
+            <div class="file-loader" id="AssetSelectorUploaderProgress">
+                This is the loader...
+            </div>
+
+            <div class="container">
+
+
+                <div class="categories">
+                    <ul id="AssetSelectorCategoryId">
+                        <li data-value="">-- All Categories --</li>
+                    </ul>
+                </div>
+
+                <div class="assets" id="AssetDropArea">
+                    <div class="drag-upload">
+                        <span>Drag Files Here</span>
+                        @*<input type="file" id="AssetUploadFile" name="AssetUploadFile[]" multiple="multiple" />*@
+                    </div>
+                    <div id="AssetsPane">
+                        <div id="AssetSelectorLoader">
+                            <img src="/Images/longLoader.gif" alt="Loading..." />
+                        </div>
+
+
+                        <div>
+                            <ul id="AssetSelectorAssetThumbs">
+                                <li>
+                                    <img src="/Images/noImageThumb.png" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <input type="button" value="Cancel" id="AssetSelectorCancel" />
+                <input type="button" value="OK" id="AssetSelectorOk" class="ok-button" />
+            </div>
+        </div>
+    </div>
+</div>

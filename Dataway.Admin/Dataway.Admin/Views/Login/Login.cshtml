@@ -1,0 +1,52 @@
+﻿@model LoginViewModel
+@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CMS - Login</title>
+        <link href="@Url.VersionedContent("~/Content/Style.min.css")" rel="stylesheet" type="text/css" />
+        <link rel="icon" type="image/png" href="~/Images/favicon.png">
+        <script src="@Url.Content("~/Scripts/jquery.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+    </head>
+    <body>
+        <div class="outer-base">
+            <div class="header">
+                <div>
+                    <h1><a href="/"><span>Dataway <span>Cms</span></span></a></h1>
+                </div>
+            </div>
+            <div class="base">
+                <div class="login-panel">
+                    <h2>Login</h2>
+                    <form method="post">
+                        <div class="field">
+                            <label for="Username">Username</label>
+                            <input type="text" name="Username" id="Username" autofocus />
+                        </div>
+                        <div class="field">
+                            <label for="Password">Password</label>
+                            <input type="password" name="Password" id="Password" />
+                        </div>
+
+						<div class="field checkbox">
+							<input type="checkbox" name="RememberMe" id="RememberMe" />
+							<label for="RememberMe">Remember me</label>
+						</div>
+
+                        <div class="button-container">
+                            <input type="submit" value="login" />
+                        </div>
+                    </form>
+                    @if (Model.IncorrectUsernameAndPassword)
+                    {
+                        <div class="error">
+                            Incorrect username and password.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

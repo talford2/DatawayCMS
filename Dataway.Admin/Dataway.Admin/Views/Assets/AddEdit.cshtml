@@ -1,0 +1,59 @@
+﻿@model AssetViewModel
+<h2>Edit Asset - @Model.Asset.Filename</h2>
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" value="@Model.Asset.Id" name="Id" />
+    <div class="panel">
+        <div class="field">
+            <label>Original filename</label>
+            <div>@Model.Asset.OriginalFilename</div>
+        </div>
+        <div class="field">
+            <label>Size & Type</label>
+            <div>@Model.Asset.FriendlyFileSize (@Model.Asset.Type)</div>
+        </div>
+        <div class="field">
+            <label>Last modified</label>
+            <div>@Model.Asset.DateLastModified.ToString("d/M/yyyy h:mm tt")</div>
+        </div>
+        <div class="field">
+            <label>Filename</label>
+            <input type="text" value="@Model.Asset.Filename" name="Filename" />
+        </div>
+
+        <div class="field">
+            <label>Category</label>
+            <select name="CategoryId">
+                <option value=""@(Html.Raw(!Model.Asset.CategoryId.HasValue ? " selected=\"selected\"" : ""))>-- No Category --</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id"@(Html.Raw(Model.Asset.CategoryId == category.Id ? " selected=\"selected\"" : ""))>@category.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="field">
+            <label>File</label>
+            <input type="file" name="File" />
+        </div>
+        <div class="field">
+            <label>&nbsp;</label>
+            <img src="/asset-thumb/@(Model.Asset.Id)?w=158&h=112&dm=@(Model.Asset.DateLastModified.Ticks.ToString().Substring(0, 14))" />
+        </div>
+        <div class="field">
+            <a href="/assets#@(Model.Asset.CategoryId)" class="button">Back</a>
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>
+@section SideSection{
+    @if (Model.Asset.GetReferencingPages().Any())
+    {
+        <h3>Referenceing Pages</h3>
+        <ul>
+            @foreach (var page in Model.Asset.GetReferencingPages())
+            {    
+                <li><a href="/page/@page.Id"><span>@page.Name</span></a></li>
+            }
+        </ul>
+    }
+}

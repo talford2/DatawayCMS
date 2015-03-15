@@ -1,0 +1,109 @@
+﻿@model SettingsViewModel
+@section HeadContent
+{
+    <script src="@Url.VersionedContent("/Scripts/PageScripts/Settings.js")" type="text/javascript"></script>
+}
+<h2>Settings</h2>
+<form action="/settings/new" method="post">
+    <div class="panel">
+        <div>
+            <label>Key</label>
+            <input type="text" id="Key" name="Key" />
+        </div>
+        <div>
+            <label>Type</label>
+            <select id="Type" name="Type">
+                <option value="string">Text</option>
+                <option value="int">Integer</option>
+                <option value="decimal">Decimal</option>
+                <option value="bool">Boolean</option>
+            </select>
+        </div>
+        <div>
+            <label>Public</label>
+            <input type="checkbox" id="PublicAccess" name="PublicAccess" />
+        </div>
+        <div>
+            <label>Site</label>
+            <select name="SiteId">
+                <option value="">- All Sites -</option>
+                @foreach (var site in Common.Sites)
+                {
+                    <option value="@site.Id">@site.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label>Value</label>
+            <input type="text" id="Value" name="Value" />
+            <input type="submit" value="Add" />
+        </div>
+    </div>
+</form>
+<br />
+<form action="/settings/save" method="post">
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>Type</th>
+            <th>Public</th>
+            <th>Value</th>
+            <th>Site</th>
+            <th></th>
+        </tr>
+        @foreach (var setting in Model.Settings)
+        {
+            <tr>
+                <td>
+                    <input type="text" id="key_@(setting.Id)" name="key_@(setting.Id)" value="@setting.Key" />
+                </td>
+                <td>
+                    <select id="type_@(setting.Id)" name="type_@(setting.Id)">
+                        <option value="string" selected="@(setting.Type == "string" ? "selected" : null)">
+                            Text
+                        </option>
+                        <option value="int" selected="@(setting.Type == "int" ? "selected" : null)">
+                            Integer
+                        </option>
+                        <option value="decimal" selected="@(setting.Type == "decimal" ? "selected" : null)">
+                            Decimal
+                        </option>
+                        <option value="bool" selected="@(setting.Type == "bool" ? "selected" : null)">
+                            Boolean
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <input type="checkbox" id="access_@(setting.Id)" name="access_@(setting.Id)" checked="@(setting.PublicAccess ? "checked" : null)" />
+                </td>
+                <td>
+                    @if (setting.Type == "bool")
+                    {
+                        <input type="checkbox" id="value_@(setting.Id)" name="value_@(setting.Id)" checked="@(!string.IsNullOrWhiteSpace(setting.Value) && (setting.Value == "1" || setting.Value.ToLower() == "true") ? "checked" : "")" />
+                    }
+                    else
+                    {
+                        <input type="text" id="value_@(setting.Id)" name="value_@(setting.Id)" value="@setting.Value" />
+                    }
+                </td>
+
+                <td>
+                    <select id="site_@(setting.Id)" name="site_@(setting.Id)">
+                        <option value="">- All Sites -</option>
+                        @foreach (var site in Common.Sites)
+                        {
+                            <option value="@site.Id" selected="@(setting.SiteId.HasValue && setting.SiteId.Value == site.Id ? "selected" : null)">@site.Name</option>
+                        }
+                    </select>
+                </td>
+
+                <td class="actions">
+                    <a class="delete" id="delete_@(setting.Id)" title="Delete"><span>Delete</span></a>
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="button-section">
+        <input type="submit" value="Save" />
+    </div>
+</form>

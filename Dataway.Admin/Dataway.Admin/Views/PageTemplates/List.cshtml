@@ -1,0 +1,67 @@
+﻿@model PageTemplatesViewModel
+@section HeadContent
+{
+    <script src="@Url.VersionedContent("/Scripts/PageScripts/PageTemplateList.js")" type="text/javascript"></script>
+}
+<div class="header">
+    <h2>Page Templates</h2>
+    <a href="page-template/new" class="button">Create New template</a>
+</div>
+<table class="templates-grid">
+    <tr>
+        <th>Template Name</th>
+        <th>Render URL</th>
+        <th>Key</th>
+        <th>Site</th>
+        <th>Pages</th>
+        <th></th>
+    </tr>
+    @foreach (var template in Model.Templates)
+    {
+        <tr>
+            <td class="name-col">
+                @if (template.IconId.HasValue)
+                {
+                    <span class="page-icon" style="background-image:url(/Images/TemplateIcons/@(template.IconId.Value).png);"></span>
+                }
+                else
+                {
+                    <span class="page-icon" style="background-image:url(/Images/TemplateIcons/1.png);"></span>
+                }
+                <a href="page-template/@template.Id">@template.TemplateName</a>
+            </td>
+            <td>
+                @template.RenderUrl
+            </td>
+            <td>
+                @template.Key
+            </td>
+            <td>
+                @if (template.SiteId.HasValue)
+                {
+                    @Dataway.Cms.Core.CmsSite.Get(template.SiteId.Value).Name
+                }
+                else
+                {
+                    <span class="all">All Sites</span>
+                }
+            </td>
+            <td>
+                @if (template.GetPages().Count == 1)
+                {
+                    var page = template.GetPages().First();
+                    <a href="/page/@page.Id">@page.Name</a>
+                }
+                else
+                {
+                    @template.GetPages().Count
+                }
+            </td>
+
+            <td class="actions">
+                <a class="delete" id="delete_@(template.Id)" title="Delete"><span>Delete</span></a>
+                <a class="new-page" href="/page/new?template=@(template.Id)" title="New Page"><span>New Page</span></a>
+            </td>
+        </tr>
+    }
+</table>

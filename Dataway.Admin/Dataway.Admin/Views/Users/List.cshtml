@@ -1,0 +1,22 @@
+﻿@model UsersViewModel
+<div class="header">
+    <h2>Users</h2>
+    <a href="/user/new" class="button">Create New User</a>
+</div>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Administrator</th>
+        <th>Active</th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td><a href="/user/@user.Id">@user.Username</a> </td>
+            <td>@user.IsAdmin.ToString()</td>
+            <td>@user.IsActive.ToString()</td>
+            <td class="actions"><a id="delete_@(user.Id)" class="delete"><span>delete</span></a></td>
+        </tr>
+    }
+</table>

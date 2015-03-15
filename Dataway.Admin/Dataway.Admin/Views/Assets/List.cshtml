@@ -1,0 +1,131 @@
+﻿@model AssetsViewModel
+@section HeadContent
+{
+    <script src="/Scripts/PageScripts/AssetsList.js" type="text/javascript"></script>
+}
+<div class="header">
+    <h2>Assets</h2>
+    @*<select id="AssetView">
+        <option value="large">Large</option>
+        <option value="details">Details</option>
+    </select>  *@  
+</div>
+<form action="/add-asset" method="post" enctype="multipart/form-data">
+    <div class="panel">
+        <div>
+            <input type="file" name="File" />
+            <select name="AssetCategoryId" class="filter">
+                <option value="">-- No Category --</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id"@(Html.Raw(Model.CategoryId == category.Id ? " selected=\"selected\"" : ""))>@category.Name</option>
+                }
+            </select>
+            <input type="submit" value="Add Asset" />
+        </div>
+    </div>
+</form>
+
+<div class="filter-panel">
+    <select id="FilterAssetCategory" class="filter">
+        <option value="" selected="selected">-- All Categories --</option>
+        @foreach (var category in Model.Categories)
+        {
+            <option value="@category.Id"@(Html.Raw(Model.CategoryId == category.Id ? " selected=\"selected\"" : ""))>@category.Name</option>
+        }
+    </select>
+    <input type="text" id="Search" title="Search" class="filter" value="@Common.LoggedInUser.Settings.AssetFilterKeywords" placeholder="Search" />
+</div>
+
+<div id="AssetContainer">
+
+    <ul id="AssetTemplate" style="display:none;">
+        <li id="asset_[assetId]">
+            <div class="thumb" style="background-image:url(/asset-thumb/[assetId]?w=200&h=150&dm=[DateLastModified]);">
+                    <div class="actions">
+                        <a class="delete" title="Delete"><span>Delete</span></a>
+                        <a class="edit" href="/asset-edit/[assetId]" title="Edit"><span>Edit</span></a>
+                    </div>
+                </div>
+                <div class="details">
+                    <a href="/asset/[assetId]" target="_blank">
+                        [Filename]
+
+                    </a><span class="type">[Type]</span> <span class="file-size">[FriendlyFileSize]</span>
+                    @*@if (asset is Dataway.Cms.CmsImageAsset)
+                    {
+                        <span class="image-dimensions">
+                            @(((Dataway.Cms.CmsImageAsset)asset).Width)
+                            x @(((Dataway.Cms.CmsImageAsset)asset).Height)
+                        </span>
+                    }*@
+                    <span class="extension">[Extension]</span> <span class="created">[DateCreated]</span>
+                </div>
+        </li>
+    </ul>
+
+
+    <ul class="assets">
+       @* @foreach (var asset in Model.Assets)
+        {
+            <li id="asset_@(asset.Id)">
+                <div class="thumb" style="background-image:url(/asset-thumb/@(asset.Id)?w=173&h=132&dm=@(asset.DateLastModified.Ticks.ToString().Substring(0, 14)));">
+                    <div class="actions">
+                        <a class="delete" title="Delete"><span>Delete</span></a>
+                        <a class="edit" href="/asset-edit/@(asset.Id)" title="Edit"><span>Edit</span></a>
+                    </div>
+                </div>
+                <div class="details">
+                    <a href="asset/@asset.Id" target="_blank">
+                        @asset.Filename
+
+                    </a><span class="type">@asset.Type</span> <span class="file-size">@asset.FriendlyFileSize</span>
+                    @if (asset is Dataway.Cms.CmsImageAsset)
+                    {
+                        <span class="image-dimensions">
+                            @(((Dataway.Cms.CmsImageAsset)asset).Width)
+                            x @(((Dataway.Cms.CmsImageAsset)asset).Height)
+                        </span>
+                    }
+                    <span class="extension">@asset.Extension</span> <span class="created">@asset.DateCreated.ToString("d MMM yyyy h:mm tt")</span>
+                </div>
+            </li>
+        }*@
+    </ul>
+</div>
+<div class="modal-shadow popup delete-asset-popup" style="display: none;" id="DeleteAssestPrompt">
+    <div>
+        <input type="hidden" id="DeleteAssetId" />
+        
+        <div class="header">
+            <h2>Are you sure you want to delete '<span class="asset-name"></span>'?</h2>
+        </div>
+
+        <div class="content">
+            <div class="loading" id="DeleteAssetPromptLoadingPages">
+                <span>
+                    Loading...
+                </span>
+            </div>
+            <div id="DeleteAssetPromptHasPages">
+                <p>'<strong class="asset-name"></strong>' belongs to the following pages:</p>
+                <ul id="DeleteAssetPromptPages">
+                </ul>
+            </div>
+            <div id="DeleteAssetPromptNoPages">
+                <p>
+                    This asset isn't used on any pages.</p>
+            </div>
+            <div style="display: none;">
+                <li id="DeleteAssetPromptLinkedPage"><a target="_blank" href="/pages/[Id]"></a>
+                </li>
+            </div>
+
+        </div>
+
+        <div class="button-container">
+            <input type="button" value="Cancel" id="DeleteAssestPromptCancel" />
+            <input type="button" value="OK" id="DeleteAssestPromptOk" class="ok-button" />
+        </div>
+    </div>
+</div>

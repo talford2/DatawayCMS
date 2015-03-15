@@ -1,0 +1,67 @@
+﻿@{
+    Dataway.Cms.Core.Tree<Dataway.Cms.CmsPage> pages = Dataway.Cms.CmsPage.GetPageTree(true, Dataway.Cms.Core.CmsCommon.CurrentSite.Id);
+}
+
+<div class="component" id="link_template">
+    <input type="hidden" class="key" />
+    <input type="hidden" class="type" value="link" />
+    <div>
+        <div class="field-container">
+            <div class="label-container">
+                <label class="name"></label>
+            </div>
+            <div class="input-container">
+                <select class="link-type">
+                    <option value="external">External</option>
+                    <option value="page">Page</option>
+                    <option value="asset">Asset</option>
+                    <option value="email">Email</option>
+                </select>
+
+                <select class="target">
+                    <option value="_self">Self</option>
+                    <option value="_blank">Blank</option>
+                    <option value="_parent">Parent</option>
+                </select>
+
+                <span class="current-selected"></span>
+
+                <div class="external-options">
+                    <input type="text" class="external-value" />
+                </div>
+
+                <div class="email-options" style="display:none;">
+                    <input type="text" class="email-value" />
+                </div>
+
+                <div class="asset-options" style="display:none;">
+                    <input type="button" value="Select asset" class="select-asset" />
+                    <input type="hidden" class="asset-value" />
+
+                    <div class="asset-detail">
+                        <div class="asset-thumb"></div>
+                        <span class="filename"></span>
+                    </div>
+
+                </div>
+
+                <div class="page-options" style="display:none;">
+                    <select class="page-value">
+                        @foreach (var page in pages)
+                        {
+                            <option value="@page.Value.Id">
+                                @for (int i = 0; i < page.GetDepth(); i++)
+                                {
+                                    <text> - </text>
+                                }
+                                @page.Value.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="description"></div>
+    </div>
+</div>

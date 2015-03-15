@@ -1,0 +1,134 @@
+﻿@model ComponentsViewModel
+@{
+    int index = 0; 
+	foreach (var component in Model.Components)
+    {
+        string componentId = "Component_" + index; switch (component.Type)
+        {
+            case "text":
+				<div class="component">
+					<div>
+						<div>
+							<input type ="hidden" class="type" value="@component.Type" />
+							<input type ="hidden" class="key" value="@component.Key" />
+							<label for="@componentId">@component.Name</label>
+							@switch (((Dataway.Cms.TemplateComponents.CmsTextTemplateComponent)component).Display)
+							{
+								case "textarea":
+									<textarea class="value" id="@componentId">@Model.Page.GetText(component.Key)</textarea>
+									break;
+								case "password":
+									<input type="password" value="@Model.Page.GetText(component.Key)" class="value" id="@componentId" />
+									break;
+								case "wysiwyg":
+									<textarea class="value" id="@componentId">@Model.Page.GetText(component.Key)</textarea>
+                                    break;
+								default:
+									<input type="text" value="@Model.Page.GetText(component.Key)" class="value" id="@componentId" />
+									break;
+							}
+							<div class="description">
+								@component.Description
+							</div>
+						</div>
+					</div>
+				</div>
+				break;
+            case "bool":
+				<div class="component">
+					<div>
+						<div>
+							<input type ="hidden" class="type" value="@component.Type" />
+							<input type ="hidden" class="key" value="@component.Key" />
+							<label for="@componentId">@component.Name</label>
+							<input type="checkbox" class="value" checked="@(Model.Page.GetBool(component.Key) ? "checked" : null)" id="@componentId" />
+							<div class="description">
+								@component.Description
+							</div>
+						</div>
+					</div>
+				</div>
+				break;
+			case "link": var linkComponent = Model.Page.GetLink(component.Key); if (linkComponent == null) { linkComponent = new Dataway.Cms.CmsLink(); }
+				<div class="component">
+					<div>
+						<div>
+							<input type ="hidden" class="type" value="@component.Type" />
+							<input type ="hidden" class="key" value="@component.Key" />
+							<label for="@componentId">@component.Name</label>
+							<input type="text" class="value" value="@linkComponent.Url" id="@componentId" />
+						</div>
+						<div>
+							<label for="@(componentId)_url">
+								Url</label>
+							<input type="text" class="url" value="@linkComponent.Url" id="@(componentId)_url" />
+						</div>
+						<div>
+							<a href="" target="_top"></a>
+							<label for="@(componentId)_target">
+								Target</label>
+							<select class="target" id="@(componentId)_target">
+                                <option value="_self" selected="@(linkComponent.Target == "_self" ? "selected" : null)">Self</option>
+                                <option value="_blank" selected="@(linkComponent.Target == "_blank" ? "selected" : null)">Blank</option>
+                                <option value="_parent" selected="@(linkComponent.Target == "_parent" ? "selected" : null)">Parent</option>
+                                <option value="_top" selected="@(linkComponent.Target == "_top" ? "selected" : null)">Top</option>
+							</select>
+						</div>
+					</div>
+				</div>
+                break;
+            case "image":
+				<div class="component">
+					<div>
+						<div>
+							<input type ="hidden" class="type" value="@component.Type" />
+							<input type ="hidden" class="key" value="@component.Key" />
+							<label for="@componentId">@component.Name</label>
+							<input type="text" class="alt" id="@componentId" />
+							<div class="description">
+								@component.Description
+							</div>
+						</div>
+					</div>
+				</div>
+               break;
+            case "container":
+				<div class="component">
+					<div>
+						<div>
+                
+							@{var container = Model.Page.GetContainerItem(component.Key); }
+							<input type ="hidden" class="type" value="@component.Type" />
+							<input type ="hidden" class="key" value="@component.Key" />
+                
+							<span>@component.Name</span>
+							<div class="description" style="width:inherit; float:none;">
+								@component.Description
+							</div>
+							<div>
+								@Html.Partial("Components", new ComponentsViewModel { Components = ((Dataway.Cms.TemplateComponents.CmsContainerTemplateComponent)component).Children, Page = Model.Page })
+							</div>
+                
+						</div>
+					</div>
+				</div>
+               break;
+			default:
+				<div class="component">
+					<div>
+						<div>
+							<input type ="hidden" class="type" value="@component.Type" />
+							<input type ="hidden" class="key" value="@component.Key" />
+							<label for="@componentId">@component.Name</label>
+							<input type="text" value="@Model.Page.GetText(component.Key)" class="value" id="@componentId" />
+							<div class="description">
+								@component.Description
+							</div>
+						</div>
+					</div>
+				</div>
+               break;
+        } 
+		index++;
+    }
+}

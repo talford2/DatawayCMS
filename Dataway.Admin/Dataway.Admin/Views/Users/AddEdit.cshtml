@@ -1,0 +1,55 @@
+﻿@model UserViewModel
+@if (Model.User.Id == 0)
+{
+    <h2>New User</h2>
+}
+else
+{
+    <h2>Edit User - @Model.User.Username</h2>
+}
+<form method="post">
+    <input type="hidden" name="CmsUserId" id="CmsUserId" value="@Model.User.Id" />
+    <div class="panel">
+        <div>
+            <label for="Username">Username</label>
+            <input type="text" id="Username" name="Username" value="@Model.User.Username" autocomplete="off" />
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" id="Password" name="Password" value="@Model.User.Password" autocomplete="off" />
+        </div>
+        <div>
+            <label>Administrator</label>
+            <input type="checkbox" id="IsAdmin" name="IsAdmin" checked="@(Model.User.IsAdmin ? "checked" : null)" />
+        </div>
+        <div>
+            <label>Active</label>
+            <input type="checkbox" id="IsActive" name="IsActive" checked="@(Model.User.IsActive ? "checked" : null)" />
+        </div>
+
+        <h3>Access</h3>
+
+        @foreach (var site in Model.AllSites)
+        {
+            <h4>@site.Name</h4>
+            foreach (var accessType in Model.AccessTypes)
+            {
+                var row = Model.Access.FirstOrDefault(a => a.SiteId == site.Id && a.AccessTypeId == accessType.Id);
+                bool hasAccess = (row != null && row.HasAccess);
+
+                var idName = string.Format("Access_{0}_{1}", site.Id, accessType.Id);
+
+                <div>
+                    <label style="width:200px;" for="@idName">@accessType.Name</label>
+                    <input type="checkbox" name="@idName" id="@idName" checked="@(hasAccess ? "checked" : null)" />
+                </div>
+            }
+        }
+
+        <div>
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>
+
+

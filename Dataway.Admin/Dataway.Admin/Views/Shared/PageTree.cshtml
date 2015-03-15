@@ -1,0 +1,81 @@
+﻿@model Dataway.Cms.Core.TreeBase<Dataway.Cms.CmsPage>
+@if (Model != null && Model.Children.Any())
+{
+    bool isExpanded = true;
+
+    if (Model is Dataway.Cms.Core.TreeNode<Dataway.Cms.CmsPage>)
+    {
+        var cmsPage = Model as Dataway.Cms.Core.TreeNode<Dataway.Cms.CmsPage>;
+        if (Common.LoggedInUser.Settings.CollapsedPages.ContainsKey(cmsPage.Value.Id))
+        {
+            isExpanded = !Common.LoggedInUser.Settings.CollapsedPages[cmsPage.Value.Id];
+        }
+    }
+    else
+    {
+        isExpanded = true;
+    }
+
+    <ul style="@(!isExpanded ? "display:none;" : null)">
+        @foreach (var node in Model.Children)
+        {
+            bool isOpen = false;
+            if (Common.LoggedInUser.Settings.CollapsedPages.ContainsKey(node.Value.Id))
+            {
+                isOpen = Dataway.Admin.Common.LoggedInUser.Settings.CollapsedPages[node.Value.Id];
+            }
+            <li class="@(!node.Value.IsActive ? "inactive" : null)">
+                <div>
+                    @for (int i = 0; i < node.GetDepth(); i++)
+                    {
+                        <span class="spacer"></span>
+                    }
+                    @if (node.Children.Any())
+                    {
+                        <div class="node-button open" title="Collapse" style="@(isOpen ? "display:none;" : null)"></div>
+                        <div class="node-button close" title="Expand" style="@(!isOpen ? "display:none;" : null)"></div>
+                    }
+                    else
+                    {
+                        <div class="node-button no-children"></div>
+                    }
+
+
+                    @if (node.Value.Template.IconId.HasValue){
+                        <span class="page-icon" style="background-image:url(/Images/TemplateIcons/@(node.Value.Template.IconId.Value).png);"></span>
+                    }
+                    else
+                    {
+                        <span class="page-icon" style="background-image:url(/Images/TemplateIcons/1.png);"></span>
+                    }
+                    
+                    <a href="/page/@(node.Value.Id)">@node.Value.Name</a>
+                    @if (!string.IsNullOrWhiteSpace(node.Value.FriendlyUrl))
+                    {
+                        <span class="page-url">
+                            - @node.Value.FriendlyUrl
+                        </span>
+                    }
+
+                    <input type="hidden" id="Order_@(node.Value.Id)" value="@node.Value.Order" class="PageOrder" />
+
+                    <div class="actions">
+                        <input type="hidden" value="@node.Value.Id" class="page-id" />
+                        <a class="up" id="up_@(node.Value.Id)" title="Move Up"><span>Up</span></a>
+                        <a class="down" id="down_@(node.Value.Id)" title="Move down"><span>Down</span></a>
+                        <a href="/page/new?parent=@(node.Value.Id)" title="New Page" class="new-page"><span>New Page</span></a>
+                        <a href="@node.Value.FullUrl" class="preview" target="_blank" title="Preview"><span>Preview</span></a>
+                        <a id="activate_@(node.Value.Id)" class="activate" style="@(node.Value.IsActive ? "display: none;" : null)" title="Click to Activate"><span>Activate</span></a>
+                        <a id="deactivate_@(node.Value.Id)" class="deactivate" style="@(!node.Value.IsActive ? "display: none;" : null)" title="Click to Deactivate"><span>Deactivate</span></a>
+                        <a class="delete" id="delete_@(node.Value.Id)" title="Delete"><span>Delete</span></a>
+                    </div>
+
+                </div>
+                @if (node.Children.Any())
+                {
+                    @Html.Partial("PageTree", node)
+                }
+            </li>
+        }
+    </ul>
+}

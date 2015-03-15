@@ -1,0 +1,33 @@
+﻿@model SettingsViewModel
+<h2>Settings</h2>
+<form action="/settings/save" method="post">
+    <table>
+        <tr>
+            <th>Setting </th>
+            <th>Value</th>
+        </tr>
+        @foreach (var setting in Model.Settings)
+        {
+            <tr>
+                <td>@setting.Key
+                
+                <input type="hidden" id="key_@(setting.Id)" name="key_@(setting.Id)" value="@setting.Key" />
+
+                </td>
+                <td>
+                    @if (setting.Type == "bool")
+                    {
+                        <input type="checkbox" name="value_@(setting.Id)" checked="@(!string.IsNullOrWhiteSpace(setting.Value) && (setting.Value == "1" || setting.Value.ToLower() == "true") ? "checked" : null)" />
+                    }
+                    else
+                    {
+                         <input type="text" name="value_@(setting.Id)" value="@setting.Value" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="button-section">
+        <input type="submit" value="Save" />
+    </div>
+</form>

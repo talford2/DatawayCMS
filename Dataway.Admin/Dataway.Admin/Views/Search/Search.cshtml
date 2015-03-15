@@ -1,0 +1,35 @@
+﻿@model SearchViewModel
+@section HeadContent
+{
+    <script src="@Url.VersionedContent("/Scripts/PageScripts/Search.js")" type="text/javascript"></script>
+}
+<h2>Search</h2>
+<form method="post">
+    <p>
+        <a href="#" id="Reindex">Reindex Search</a>
+        @Model.IndexLastUpdated.ToString()
+    </p>
+	<p>
+		@Dataway.Cms.Core.CmsCommon.SearchIndexDir
+	</p>
+
+    <input type="text" name="Term" id="Term" value="@Model.Term" placeholder="Search Terms" />
+    <input type="submit" value="Search" />
+    @if (Model.Results != null)
+    {
+        <div class="search-results">
+            @foreach (var result in Model.Results)
+            {
+                <div>
+                    <h3>
+                        <a href="/page/@result.PageId">@Html.HighlightSearch(result.PageTitle, Model.Term, "highlight")</a>
+                        <span>
+                            (<a href="/page-template/@result.Page.Template.Id">@result.Page.Template.TemplateName</a>)
+                        </span>
+                    </h3>
+                    @Html.HighlightSearch(result.Content, Model.Term, "highlight")
+                </div>
+            }
+        </div>
+    }
+</form>
