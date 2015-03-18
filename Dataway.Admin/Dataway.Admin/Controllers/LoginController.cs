@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Mvc;
 using Dataway.Admin.Attributes;
 using Dataway.Admin.ViewModels;
 using Dataway.Cms.Core;
+using Dataway.Extensions;
+using Dataway.Extensions.Encryption;
 using Dataway.MvcLibrary.Helpers;
 
 namespace Dataway.Admin.Controllers
@@ -108,9 +111,32 @@ namespace Dataway.Admin.Controllers
             return new EmptyResult();
         }
 
-        public ActionResult ResetPassword()
+        [UserAccess(false, false, false)]
+        public ActionResult ForgotPassword()
         {
-            throw new NotImplementedException();
+            return View();
+        }
+
+        [HttpPost]
+        [UserAccess(false, false, false)]
+        public ActionResult ForgotPassword(FormCollection form)
+        {
+            var secure = Encryption.GetOneWayEncryption("secure");
+
+            string email = form.Value<string>("Email");
+
+            var password = StringExtensions.GenerateRandomString(10, 12);
+            if (CmsUser.SetPassword(email, password))
+            {
+                MailMessage message = new MailMessage("no-reply@dataway.com.au", email);
+                message.Subject = "Dataway CMS Password Reset";
+                message.IsBodyHtml = true;
+                message.Body = string.Format("You password has been reset to: {0}", password);
+                SmtpClient client = new SmtpClient();
+                client.Send(message);
+            }
+
+            return View();
         }
     }
 }

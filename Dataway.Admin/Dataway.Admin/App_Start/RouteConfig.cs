@@ -15,6 +15,7 @@ namespace Dataway.Admin
 
             routes.MapRoute("Home", "", new { controller = "Home", action = "Home" });
             routes.MapRoute("Login", "login", new { controller = "Login", action = "Login" });
+            routes.MapRoute("Forgot Password", "forgot-password", new { controller = "Login", action = "ForgotPassword" });
             routes.MapRoute("Logout", "logout", new { controller = "Login", action = "Logout" });
 
             routes.MapRoute("Set Page Expand", "user-settings/set-page-expand", new { controller = "Login", action = "SetPageExpand" });

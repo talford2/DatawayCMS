@@ -101,11 +101,12 @@ namespace Dataway.Admin.Controllers
             {
                 if (asset.Type == "Image")
                 {
-                    return WebImagingController.GetProcessedImageResult(asset.GetUrlPath(), width, height, new ImageProcessingFullSettings { Quality = 90, ScratchUrl = "/AssetsDir/Dynamic", MissingImageUrl = "/Images/noImage.jpg", IsCropped = true, UseResampling = true });
+                    //return WebImagingController.GetProcessedImageResult(asset.GetUrlPath(), width, height, new ImageProcessingFullSettings { Quality = 90, ScratchUrl = "/AssetsDir/Dynamic", MissingImageUrl = "/Images/noImage.jpg", IsCropped = true, UseResampling = true });
+                    return new FilePathResult(WebImagingController.GetProcessedImageFilename(asset.GetUrlPath(), width, height, new ImageProcessingFullSettings { Quality = 90, ScratchUrl = "/AssetsDir/Dynamic", MissingImageUrl = "/Images/noImage.jpg", IsCropped = true, UseResampling = true }), "image/jpeg");
                 }
                 else
                 {
-                    return WebImagingController.GetProcessedImageResult("/Images/FileTypes/" + asset.Type + ".png", width, height, new ImageProcessingFullSettings { Quality = 90, ScratchUrl = "/AssetsDir/Dynamic", MissingImageUrl = "/Images/FileTypes/Unknown.png", IsCropped = false, UseResampling = true });
+                    return new FilePathResult(WebImagingController.GetProcessedImageFilename("/Images/FileTypes/" + asset.Type + ".png", width, height, new ImageProcessingFullSettings { Quality = 90, ScratchUrl = "/AssetsDir/Dynamic", MissingImageUrl = "/Images/FileTypes/Unknown.png", IsCropped = false, UseResampling = true }), "image/jpeg");
                 }
 
             }
@@ -117,8 +118,6 @@ namespace Dataway.Admin.Controllers
         {
             int width = 1000;
             int height = 1000;
-
-
 
             if (!string.IsNullOrWhiteSpace(Request["w"]))
             {
@@ -167,7 +166,9 @@ namespace Dataway.Admin.Controllers
             var asset = CmsAsset.GetAsset(assetId);
 
             //return WebImagingController.GetProcessedImageResult(asset.GetUrlPath(), width, height, new ImageProcessingFullSettings { IsCropped = isCropped, Quality = quality, UseResampling = true, IsGreyScale = isGreyScale, IsInverted = invert, CropPosition = cropPos });
-            return WebImagingController.GetProcessedImageResult(asset.GetUrlPath(), width, height, settings);
+            //return WebImagingController.GetProcessedImageResult(asset.GetUrlPath(), width, height, settings);
+
+            return new FilePathResult(WebImagingController.GetProcessedImageFilename(asset.GetUrlPath(), width, height, settings), "image/jpeg");
         }
 
         //[OutputCache(Duration = 8640000, VaryByParam = "dm", Location = System.Web.UI.OutputCacheLocation.Client)]

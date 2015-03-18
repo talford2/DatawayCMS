@@ -425,6 +425,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Extensions\Dataway.Extensions\Dataway.Extensions.csproj">
+      <Project>{20fba5e2-02a9-4d08-910d-7bfc2788ccba}</Project>
+      <Name>Dataway.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\ImageLibrary\Dataway.ImageLibrary.csproj">
       <Project>{f9407b30-c021-4d0d-b8cb-bc5db2797d25}</Project>
       <Name>Dataway.ImageLibrary</Name>
@@ -479,6 +483,7 @@
     <Content Include="Scripts\tinymce\skins\light\fonts\tinymce.ttf" />
     <Content Include="Scripts\tinymce\skins\light\fonts\tinymce.woff" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Login\ForgotPassword.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
